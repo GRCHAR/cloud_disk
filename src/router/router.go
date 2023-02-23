@@ -22,6 +22,10 @@ func InitRouter() {
 	{
 
 	}
+	r.Group("/dir")
+	{
+
+	}
 
 	r.Run(":8072")
 }
