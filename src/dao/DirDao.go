@@ -1,26 +1,26 @@
 package dao
 
-type dir struct {
+type Dir struct {
 	Id         string
 	Name       string
-	Parent     *dir
+	Parent     *Dir
 	CreateUser user
 	CreateTime int64
 	UpdateTime int64
 }
 
-func NewDir() *dir {
-	return new(dir)
+func NewDir() *Dir {
+	return new(Dir)
 }
 
-func (*dir) Create(name string, parent dir) {
-
-}
-
-func (*dir) UpdateName(name string) {
+func (*Dir) Create(name string, parent Dir) {
 
 }
 
-func (*dir) UpdateParent(parent dir) {
+func (*Dir) UpdateName(name string) {
+
+}
+
+func (*Dir) UpdateParent(parent Dir) {
 
 }

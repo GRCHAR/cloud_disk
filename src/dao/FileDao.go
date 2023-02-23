@@ -1,9 +1,9 @@
 package dao
 
-type file struct {
+type File struct {
 	Id         string
 	Name       string
-	Parent     dir
+	Parent     Dir
 	CreateUser user
 	FileType   string
 	FileLength int64
@@ -11,14 +11,17 @@ type file struct {
 	UpdateTime int64
 }
 
-func NewFile() *file {
-	return new(file)
+type FileDao struct {
 }
 
-func (*file) CreateFile() {
+func NewFile() *File {
+	return new(File)
+}
+
+func (*FileDao) CreateFile() {
 
 }
 
-func (*file) FindFile(id string) file {
+func (*FileDao) FindFile(id string) File {
 	return *NewFile()
 }
