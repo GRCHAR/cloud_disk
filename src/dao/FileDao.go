@@ -4,7 +4,7 @@ type File struct {
 	Id         string
 	Name       string
 	Parent     Dir
-	CreateUser user
+	CreateUser string
 	FileType   string
 	FileLength int64
 	CreateTime int64
