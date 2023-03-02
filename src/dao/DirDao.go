@@ -4,7 +4,7 @@ type Dir struct {
 	Id         string
 	Name       string
 	Parent     *Dir
-	CreateUser user
+	UserId     string
 	CreateTime int64
 	UpdateTime int64
 }

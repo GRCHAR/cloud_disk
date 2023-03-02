@@ -1,6 +1,7 @@
 package service
 
 import (
+	"cloud_disk/src/config"
 	"cloud_disk/src/dao"
 	"errors"
 	"github.com/gin-gonic/gin"
@@ -24,7 +25,7 @@ var uploadTaskDao *dao.UploadTaskDao
 var userDao *dao.UserDao
 var fileDao *dao.FileDao
 
-func (service *FileService) CreateUploadTask(fileName string, fileSize int64, userId string) (string, error) {
+func (service *FileService) CreateUploadTask(fileName string, fileSize int64, userId string) (taskId string, err error) {
 
 	uploadUser, err := userDao.FindUserById(userId)
 	if err != nil {
@@ -32,7 +33,7 @@ func (service *FileService) CreateUploadTask(fileName string, fileSize int64, us
 		return "", err
 	}
 	uploadFile := dao.File{FileLength: fileSize, Name: fileName, CreateUser: uploadUser.Id}
-	taskId, err := uploadTaskDao.CreateUploadTask(uploadFile)
+	taskId, err = uploadTaskDao.CreateUploadTask(uploadFile)
 	if err != nil {
 		service.logger.Error("CreateUploadTask CreateUploadTask error:", zap.Error(err))
 		return "", err
@@ -80,7 +81,7 @@ func (service *FileService) SaveFile(c *gin.Context, header *multipart.FileHeade
 	if err != nil {
 		return err
 	}
-	uploadTempDir := ""
+	uploadTempDir := config.GetConfig().Server.TempDirPath
 
 	err = c.SaveUploadedFile(header, uploadTempDir+"/"+task.UserId+"/"+task.Id+"/"+strconv.Itoa(partNumber))
 
@@ -96,8 +97,8 @@ func (service *FileService) runTask(taskId string) error {
 }
 
 func (service *FileService) mergeFile(taskId string) error {
-	uploadTempDir := ""
-	resultDir := ""
+	uploadTempDir := config.GetConfig().Server.TempDirPath
+	resultDir := config.GetConfig().Server.MergeDirPath
 	task, err := uploadTaskDao.FindUploadTaskById(taskId)
 	if err != nil {
 		return err
