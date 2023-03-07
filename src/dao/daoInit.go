@@ -11,7 +11,7 @@ type Dao struct {
 
 var DB *gorm.DB
 
-func (dao *Dao) initDao() {
+func (dao *Dao) initMysql() {
 	db, err := gorm.Open("mysql", "root:123456@/cloud?charset=utf8&parseTime=True&loc=Local")
 	if err != nil {
 		dao.logger.Error("连接数据失败!", zap.Error(err))
@@ -29,4 +29,7 @@ func (dao *Dao) initDao() {
 			dao.logger.Error("创建File表失败")
 		}
 	}
+}
+
+func (dao *Dao) initRedis() {
 }
