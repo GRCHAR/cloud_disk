@@ -26,15 +26,11 @@ func getConfig(filePath string) Config {
 	config := Config{}
 	content, err := ioutil.ReadFile(filePath)
 	if err != nil {
-		log.Fatalf("解析config.yaml读取错误: %v", err)
+		log.Printf("解析config.yaml读取错误: %v\n", err)
 	}
-
-	// fmt.Println(string(content))
-	// fmt.Printf("init data: %v", config)
 	if yaml.Unmarshal(content, &config) != nil {
-		log.Fatalf("解析config.yaml出错: %v", err)
+		log.Printf("解析config.yaml出错: %v\n", err)
 	}
-	// fmt.Printf("File config: %v", config)
 	return config
 }
 

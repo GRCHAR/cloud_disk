@@ -96,30 +96,47 @@ func (service *FileService) runTask(taskId string) error {
 	return nil
 }
 
-func (service *FileService) mergeFile(taskId string) error {
-	uploadTempDir := config.GetConfig().Server.TempDirPath
-	resultDir := config.GetConfig().Server.MergeDirPath
+func (service *FileService) MergeFile(taskId string) error {
+	go func() {
+		uploadTempDir := config.GetConfig().Server.TempDirPath
+		resultDir := config.GetConfig().Server.MergeDirPath
+		task, err := uploadTaskDao.FindUploadTaskById(taskId)
+		if err != nil {
+			service.logger.Error("FindUploadTaskById err", zap.Error(err))
+			return
+		}
+		fs := os.DirFS(uploadTempDir + "/" + task.UserId + task.Id)
+		resultFile, err := os.Create(resultDir + "/" + task.UserId + "/" + task.FileId)
+		if err != nil {
+			service.logger.Error("os.Create err", zap.Error(err))
+
+			return
+		}
+		var tempByte []byte
+		for i := 0; i < task.PartNumber; i++ {
+			tempByte = []byte{}
+			file, err := fs.Open(strconv.Itoa(i))
+			if err != nil {
+				service.logger.Error("fs.Open err", zap.Error(err))
+				return
+			}
+			_, err = file.Read(tempByte)
+			if err != nil {
+				service.logger.Error("file.Read err", zap.Error(err))
+				return
+			}
+			resultFile.WriteAt(tempByte, int64(1024*i))
+		}
+		return
+	}()
+	return nil
+}
+
+func (service *FileService) GetTaskStatus(taskId string) (status string, err error) {
 	task, err := uploadTaskDao.FindUploadTaskById(taskId)
 	if err != nil {
-		return err
+		service.logger.Error("uploadTaskDao.FindUploadTaskById err,", zap.Error(err))
+		return "", err
 	}
-	fs := os.DirFS(uploadTempDir + "/" + task.UserId + task.Id)
-	resultFile, err := os.Create(resultDir + "/" + task.UserId + "/" + task.FileId)
-	if err != nil {
-		return err
-	}
-	var tempByte []byte
-	for i := 0; i < task.PartNumber; i++ {
-		tempByte = []byte{}
-		file, err := fs.Open(strconv.Itoa(i))
-		if err != nil {
-			return err
-		}
-		_, err = file.Read(tempByte)
-		if err != nil {
-			return err
-		}
-		resultFile.WriteAt(tempByte, int64(1024*i))
-	}
-	return nil
+	return task.Status, nil
 }

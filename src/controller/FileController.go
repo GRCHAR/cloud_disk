@@ -55,6 +55,29 @@ func (controller *fileController) CreateUploadFileHandler(c *gin.Context) {
 	})
 }
 
+func (controller *fileController) MergeUploadFileHandler(c *gin.Context) {
+	taskId, ok := c.GetQuery("taskId")
+	if !ok {
+		notFindQuery("taskId", c)
+	}
+	//userId, err := c.Cookie("u_id")
+	//if err != nil {
+	//	controller.logger.Error("cookie not found cookie", zap.Error(err))
+	//	serverError(c)
+	//	return
+	//}
+	err := fileService.MergeFile(taskId)
+	if err != nil {
+		serverError(c)
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"code":    0,
+		"message": "开始合并",
+	})
+
+}
+
 func (controller *fileController) StartUploadFileTaskHandler(c *gin.Context) {
 	//userId, err := c.Cookie("u_id")
 	//taskId, ok := c.GetQuery("taskId")
@@ -63,6 +86,26 @@ func (controller *fileController) StartUploadFileTaskHandler(c *gin.Context) {
 
 func (controller *fileController) StopUploadFileTaskHandler(c *gin.Context) {
 
+}
+
+func (controller *fileController) GetUploadFileTaskHandler(c *gin.Context) {
+	taskId, ok := c.GetQuery("taskId")
+	if !ok {
+		notFindQuery("taskId", c)
+		return
+	}
+	status, err := fileService.GetTaskStatus(taskId)
+	if err != nil {
+		serverError(c)
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"code":    0,
+		"message": "",
+		"data": map[string]string{
+			"status": status,
+		},
+	})
 }
 
 func (controller *fileController) UploadFileHandler(c *gin.Context) {
@@ -87,6 +130,13 @@ func (controller *fileController) UploadFileHandler(c *gin.Context) {
 		serverError(c)
 		return
 	}
+	c.JSON(http.StatusOK, gin.H{
+		"code":    0,
+		"message": "done",
+		"data": map[string]int{
+			"pieceNumber": pieceNumber,
+		},
+	})
 }
 
 func (controller *fileController) DownloadFileHandler(c *gin.Context) {
