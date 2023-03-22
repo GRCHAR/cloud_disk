@@ -2,6 +2,7 @@ package controller
 
 import (
 	"cloud_disk/src/service"
+	"cloud_disk/src/vo"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"net/http"
@@ -46,13 +47,7 @@ func (controller *fileController) CreateUploadFileHandler(c *gin.Context) {
 		serverError(c)
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{
-		"code":    0,
-		"message": "",
-		"data": map[string]string{
-			"taskId": taskId,
-		},
-	})
+	vo.ResponseDataSuccess(map[string]string{"taskId": taskId}, c)
 }
 
 func (controller *fileController) MergeUploadFileHandler(c *gin.Context) {
@@ -71,10 +66,12 @@ func (controller *fileController) MergeUploadFileHandler(c *gin.Context) {
 		serverError(c)
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{
-		"code":    0,
-		"message": "开始合并",
-	})
+	vo.ResponseDataSuccess(gin.H{}, c)
+
+	//c.JSON(http.StatusOK, gin.H{
+	//	"code":    0,
+	//	"message": "开始合并",
+	//})
 
 }
 
@@ -124,7 +121,8 @@ func (controller *fileController) UploadFileHandler(c *gin.Context) {
 		return
 	}
 	pieceNumber, _ := strconv.Atoi(partNumber)
-	err = fileService.SaveFile(c, file, taskId, pieceNumber)
+	fileService.AppendUploadFileChannel(c, file, taskId, pieceNumber)
+
 	if err != nil {
 		controller.logger.Error("SaveFile err", zap.Error(err))
 		serverError(c)
@@ -148,6 +146,10 @@ func (controller *fileController) MoveFileHandler(c *gin.Context) {
 }
 
 func (controller *fileController) DeleteFileHandler(c *gin.Context) {
+
+}
+
+func (controller *fileController) GetFileTreeHandler(c *gin.Context) {
 
 }
 

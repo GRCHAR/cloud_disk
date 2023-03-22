@@ -16,3 +16,7 @@ func (controller *directoryController) CreateDirHandler(c *gin.Context) {
 func (controller *directoryController) DeleteDirHandler(c *gin.Context) {
 
 }
+
+func (controller *directoryController) GetDirFilesHandler(c *gin.Context) {
+
+}

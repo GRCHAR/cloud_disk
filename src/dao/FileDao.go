@@ -1,5 +1,7 @@
 package dao
 
+import "errors"
+
 type File struct {
 	Id         string
 	Name       string
@@ -24,4 +26,12 @@ func (*FileDao) CreateFile() {
 
 func (*FileDao) FindFile(id string) File {
 	return *NewFile()
+}
+
+func (*FileDao) FindAllFilesByUserId(id string) []File {
+	return []File{}
+}
+
+func (*FileDao) FindAllFilesByDirId(id string) ([]File, error) {
+	return []File{}, errors.New("test")
 }
