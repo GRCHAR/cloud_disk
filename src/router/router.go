@@ -2,6 +2,7 @@ package router
 
 import "github.com/gin-gonic/gin"
 import "cloud_disk/src/controller"
+import "cloud_disk/src/logger"
 
 func init() {
 
@@ -10,15 +11,16 @@ func init() {
 func InitRouter() {
 
 	r := gin.Default()
-	fileController := controller.NewFileController()
-	r.Group("/file")
-	{
-		r.POST("/createUploadTask", fileController.CreateUploadFileHandler)
-		r.POST("/")
 
-		r.POST("/download", fileController.DownloadFileHandler)
-		r.POST("/move", fileController.MoveFileHandler)
-		r.POST("/delete", fileController.DeleteFileHandler)
+	fileController := controller.NewFileController(logger.GetLogger())
+	fileGroup := r.Group("/file")
+	{
+		fileGroup.POST("/createUploadTask", fileController.CreateUploadFileHandler)
+		fileGroup.POST("/upload", fileController.UploadFileHandler)
+		fileGroup.POST("/download", fileController.DownloadFileHandler)
+		fileGroup.POST("/move", fileController.MoveFileHandler)
+		fileGroup.POST("/delete", fileController.DeleteFileHandler)
+		fileGroup.GET("/start", fileController.StartUploadFileTaskHandler)
 	}
 	r.Group("/info")
 	{
@@ -29,5 +31,9 @@ func InitRouter() {
 
 	}
 
-	r.Run(":8072")
+	r.Run("0.0.0.0:8075")
+}
+
+func checkFile(c *gin.Context) {
+
 }

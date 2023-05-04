@@ -1,6 +1,8 @@
 package config
 
 import (
+	"cloud_disk/src/logger"
+	"github.com/sirupsen/logrus"
 	"io/ioutil"
 	"log"
 
@@ -20,6 +22,12 @@ var serverconfig Config
 
 func init() {
 	serverconfig = getConfig("./application.yaml")
+	logger := logger.GetLogger()
+	logger.WithFields(logrus.Fields{
+		"Port":         serverconfig.Server.Port,
+		"TempDirPath":  serverconfig.Server.TempDirPath,
+		"MergeDirPath": serverconfig.Server.MergeDirPath,
+	}).Info("配置文件读取成功")
 }
 
 func getConfig(filePath string) Config {
