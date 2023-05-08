@@ -33,7 +33,7 @@ func (fileDao *FileDao) CreateFile(name string, parentId int, userId int, fileTy
 		ParentId:   int64(parentId),
 		CreateUser: int64(userId),
 		FileType:   fileType,
-		FileLength: int64(fileLength),
+		FileLength: fileLength,
 		CreateTime: 0,
 		UpdateTime: 0,
 	}
@@ -45,9 +45,9 @@ func (fileDao *FileDao) CreateFile(name string, parentId int, userId int, fileTy
 	return file, nil
 }
 
-func (fileDao *FileDao) FindFile(id int) (File, error) {
+func (fileDao *FileDao) FindFile(id int64) (File, error) {
 	file := File{}
-	if err := db.Model(&file).Where("id=?", int64(id)).Error; err != nil {
+	if err := db.Model(&file).Where("id=?", id).Error; err != nil {
 		fileDao.logger.Error(err)
 		return file, err
 	}
@@ -67,12 +67,20 @@ func (*FileDao) FindAllFilesByUserId(id string) []File {
 	return []File{}
 }
 
-func (fileDao *FileDao) FindAllFilesByDirId(id string) ([]File, error) {
+func (fileDao *FileDao) FindAllFilesByDirId(id int64) ([]File, error) {
 	var files []File
-	if err := db.Model(&files).Where("ParentId", id).Error; err != nil {
+	if err := db.Model(&files).Where("ParentId=?", id).Error; err != nil {
 		fileDao.logger.Error(err)
 		return files, nil
 	}
 
 	return files, nil
+}
+
+func (fileDao *FileDao) DeleteAllFilesByDirId(dirId int64) error {
+	if err := db.Where("ParentId=?", dirId).Delete(&File{}).Error; err != nil {
+		fileDao.logger.Error("DeleteAllFilesByDirId err:", err)
+		return err
+	}
+	return nil
 }

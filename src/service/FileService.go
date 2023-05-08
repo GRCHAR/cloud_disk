@@ -48,6 +48,7 @@ var fileDao *dao.FileDao
 
 func init() {
 	uploadTaskDao = dao.GetUploadDao()
+	fileDao = dao.NewFileDao()
 }
 
 func GetFileService() *FileService {
@@ -401,7 +402,8 @@ func (service *FileService) GetTaskStatus(taskId int) (status string, err error)
 }
 
 func (service *FileService) GetDirFiles(dirId string, userId string) (files []dao.File, err error) {
-	files, err = fileDao.FindAllFilesByDirId(dirId)
+	dirIdInt, _ := strconv.Atoi(dirId)
+	files, err = fileDao.FindAllFilesByDirId(int64(dirIdInt))
 	return
 }
 

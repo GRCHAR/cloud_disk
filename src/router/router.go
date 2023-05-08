@@ -26,9 +26,14 @@ func InitRouter() {
 	{
 
 	}
-	r.Group("/dir")
-	{
 
+	directoryController := controller.NewDirectoryController()
+
+	directoryGroup := r.Group("/dir")
+	{
+		directoryGroup.GET("/list", directoryController.GetDirFilesHandler)
+		directoryGroup.GET("/create", directoryController.CreateDirHandler)
+		directoryGroup.GET("/delete", directoryController.DeleteDirHandler)
 	}
 
 	r.Run("0.0.0.0:8075")
