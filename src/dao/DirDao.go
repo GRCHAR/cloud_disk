@@ -27,11 +27,11 @@ func (*DirDao) Create(parentId int64, dirName string) (dir Dir, err error) {
 	return Dir{}, nil
 }
 
-func (*DirDao) UpdateName(name string) (dir Dir, err error) {
+func (*DirDao) UpdateName(dirId int64, name string) (dir Dir, err error) {
 	return Dir{}, nil
 }
 
-func (*DirDao) UpdateParent(parent Dir) (dir Dir, err error) {
+func (*DirDao) UpdateParent(dirId int64, parentId int64) (dir Dir, err error) {
 	return Dir{}, nil
 }
 
@@ -41,4 +41,9 @@ func (*DirDao) Delete(id int64) error {
 
 func (*DirDao) FindAllDirByDirId(id int64) (dirs []Dir, err error) {
 	return []Dir{}, nil
+}
+
+func (*DirDao) FindDirByDirId(id int64) (Dir, error) {
+
+	return Dir{}, nil
 }

@@ -167,6 +167,10 @@ func (controller *fileController) UploadFileHandler(c *gin.Context) {
 	})
 }
 
+func (controller *fileController) CreateDownloadFileTask(c *gin.Context) {
+
+}
+
 func (controller *fileController) DownloadFileHandler(c *gin.Context) {
 
 }

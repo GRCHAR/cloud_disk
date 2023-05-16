@@ -78,3 +78,21 @@ func (service *DirectoryService) ListFiles(parentId int64) ([]dao.File, error) {
 	}
 	return files, nil
 }
+
+func (service *DirectoryService) MoveDir(dirId int64, parentId int64) error {
+	_, err := dirDao.UpdateParent(dirId, parentId)
+	if err != nil {
+		service.logger.Error("MoveDir UpdateParent error:", err)
+		return err
+	}
+	return nil
+}
+
+func (service *DirectoryService) UpdateDirName(dirId int64, name string) error {
+	_, err := dirDao.UpdateName(dirId, name)
+	if err != nil {
+		service.logger.Error("updateDirName updateName error:", err)
+		return err
+	}
+	return nil
+}

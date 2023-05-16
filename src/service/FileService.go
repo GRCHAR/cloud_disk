@@ -43,12 +43,12 @@ type taskSystem struct {
 }
 
 var uploadTaskDao *dao.UploadTaskDao
-var userDao *dao.UserDao
 var fileDao *dao.FileDao
 
 func init() {
 	uploadTaskDao = dao.GetUploadDao()
 	fileDao = dao.NewFileDao()
+
 }
 
 func GetFileService() *FileService {

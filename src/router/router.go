@@ -11,6 +11,14 @@ func init() {
 func InitRouter() {
 
 	r := gin.Default()
+	userController := controller.NewUserController()
+	userGroup := r.Group("/user")
+	{
+		userGroup.POST("/signup", userController.Register)
+		userGroup.POST("/loginUsername", userController.LoginByUserName)
+		userGroup.POST("/loginSession", userController.LoginBySession)
+		userGroup.POST("/logout", userController.Logout)
+	}
 
 	fileController := controller.NewFileController(logger.GetLogger())
 	fileGroup := r.Group("/file")
