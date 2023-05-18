@@ -6,7 +6,7 @@ import (
 	"log"
 )
 
-var Rdb = NewRedisManager()
+var Rdb *redis.Client
 
 func NewRedisManager() *redis.Client {
 	return Rdb
