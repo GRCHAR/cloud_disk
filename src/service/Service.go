@@ -1,7 +1,13 @@
 package service
 
-import "go.uber.org/zap"
+import (
+	"github.com/sirupsen/logrus"
+)
 
 type rawService struct {
-	logger zap.Logger
+	logger *logrus.Logger
+}
+
+func init() {
+
 }
