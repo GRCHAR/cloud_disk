@@ -44,7 +44,10 @@ func InitRouter() {
 		directoryGroup.GET("/delete", directoryController.DeleteDirHandler)
 	}
 
-	r.Run("0.0.0.0:8075")
+	err := r.Run("0.0.0.0:8075")
+	if err != nil {
+		panic("run server error:" + err.Error())
+	}
 }
 
 func checkFile(c *gin.Context) {

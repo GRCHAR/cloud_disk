@@ -1,7 +1,7 @@
 package grpc
 
 import (
-	"cloud_disk/src/grpc/proto"
+	"cloud_disk/src/grpcapi/proto"
 	"context"
 	"google.golang.org/grpc"
 	"log"

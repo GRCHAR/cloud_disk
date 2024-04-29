@@ -99,8 +99,8 @@ func (service *downloadTaskService) downloadPartFile(fileId int64, c *gin.Contex
 func (service *downloadTaskService) downloadFileQueueHandler() {
 	for {
 		select {
-		case dtqo := <-service.downloadTaskQueue:
-			service.downloadFile(dtqo.fileId, dtqo.taskId, dtqo.context)
+		case downloadTask := <-service.downloadTaskQueue:
+			service.downloadFile(downloadTask.fileId, downloadTask.taskId, downloadTask.context)
 		default:
 			continue
 		}
