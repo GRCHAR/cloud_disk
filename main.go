@@ -1,12 +1,17 @@
 package main
 
 import (
-	"cloud_disk/src/router"
+	grpc "cloud_disk/src/grpcapi"
 	"log"
+	"sync"
 )
 
 func main() {
 	log.Println("cloud disk start!")
-	router.InitRouter()
-
+	//router.InitRouter()
+	grpc.StartGrpcServer()
+	//grpc.StartGrpcClient()
+	wg := sync.WaitGroup{}
+	wg.Add(1)
+	wg.Wait()
 }

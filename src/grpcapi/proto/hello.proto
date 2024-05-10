@@ -2,13 +2,33 @@
 syntax = "proto3";
 option go_package = "../proto";
 
-package grpc;
+package grpcServer;
 
 
 service HelloService {
   rpc Hello (String) returns (String);
+  rpc HelloMessage (Message) returns (Message);
+  rpc HelloTwo (String) returns (String);
+  rpc HelloServerStream (Count) returns (stream Count);
+  rpc HelloClientStream (stream Count) returns (Count);
+  rpc HelloDoubleStream (stream Count) returns (stream Count);
 }
 
 message String {
   string value = 1;
+}
+
+message User {
+  String name = 1;
+  String password = 2;
+  String id = 3;
+  String sex = 4;
+}
+
+message Message {
+  string value = 1;
+}
+
+message Count {
+  int64 value = 1;
 }
